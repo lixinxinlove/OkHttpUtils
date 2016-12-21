@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
         btnOkHttp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                App.api.login(callback);
+               // App.api.login(callback);
+                App.api.userLogin(callback);
             }
         });
 
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void _RequestCallback(ResponseEntity res) {
             Toast.makeText(MainActivity.this, res.data, Toast.LENGTH_LONG).show();
+            Log.e("lee",res.data);
         }
     };
 

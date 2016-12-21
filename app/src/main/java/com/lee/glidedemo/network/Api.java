@@ -8,8 +8,10 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -38,6 +40,30 @@ public class Api {
     }
 
 
+    public void userLogin(RequestCallback requestCallback) {
+        RequestBody formBody;
+        FormBody.Builder builder = new FormBody.Builder();
+        builder.add("url", "www.baidu.com");
+        builder.add("desc", "10");
+        builder.add("type", "ios");
+        builder.add("debug", "true");
+        builder.add("who", "lee");
+
+
+        formBody = builder.build();
+
+        Request request = new Request.Builder()
+                .url("https://gank.io/api/add2gank")
+                .post(formBody)
+                .build();
+        Call call = client.newCall(request);
+        requestCallback.setCall(call);
+        RequestCallbackImpl callback = new RequestCallbackImpl(requestCallback);
+        call.enqueue(callback);
+
+    }
+
+
     class RequestCallbackImpl implements Callback {
 
         private RequestCallback mCallback;
@@ -53,7 +79,6 @@ public class Api {
             entity.code = "0";
             entity.data = "失败";
             entity.message = "fail";
-            mCallback._RequestCallback(entity);
 
             mHandler.post(new Runnable() {
                 @Override
@@ -70,21 +95,12 @@ public class Api {
             entity.data = str;
             entity.message = "ok";
 
-
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     mCallback._RequestCallback(entity);
                 }
             });
-
-
-//            mCallback.activity.runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mCallback._RequestCallback(entity);
-//                }
-//            });
 
         }
     }
