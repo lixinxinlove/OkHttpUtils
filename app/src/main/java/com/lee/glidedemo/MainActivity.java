@@ -4,6 +4,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +25,13 @@ import com.bumptech.glide.Glide;
 import com.lee.glidedemo.network.RequestCallback;
 import com.lee.glidedemo.network.ResponseEntity;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageView imageView;
     Button btn;
@@ -35,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnJS;
 
-
     Button btnOkHttp;
+    Button btnPostImageText;
+    Button btnDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +59,17 @@ public class MainActivity extends AppCompatActivity {
         btnJS = (Button) findViewById(R.id.btn_js);
 
         btnOkHttp = (Button) findViewById(R.id.btn_ok_http);
+        btnPostImageText = (Button) findViewById(R.id.btn_post);
+        btnDown = (Button) findViewById(R.id.btn_down);
+        btnDown.setOnClickListener(this);
+
+
+        btnPostImageText.setOnClickListener(this);
 
         btnOkHttp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // App.api.login(callback);
+                // App.api.login(callback);
                 App.api.userLogin(callback);
             }
         });
@@ -149,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void _RequestCallback(ResponseEntity res) {
             Toast.makeText(MainActivity.this, res.data, Toast.LENGTH_LONG).show();
-            Log.e("lee",res.data);
+            Log.e("lee", res.data);
         }
     };
 
@@ -157,8 +172,53 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         callback._onCancelled();
-        Log.e("","callback");
+        Log.e("", "callback");
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_post:
+
+                String filePath = getCacheDir().getPath();
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                File dirFile = new File(filePath);
+                if (!dirFile.exists()) {
+                    dirFile.mkdir();
+                }
+                File myCaptureFile = new File(filePath + "lee.png");
+                BufferedOutputStream bos = null;
+                try {
+                    bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+                try {
+                    bos.flush();
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                File file = new File(filePath + "lee.png");
+                App.api.postMultipart(callback, file);
+                break;
+            case R.id.btn_down:
+                App.api.downFile(requestCallback, "http://ohhic2rt3.bkt.clouddn.com/lee0.jpg-CSDN");
+                break;
+        }
+    }
+
+
+    RequestCallback requestCallback = new RequestCallback() {
+        @Override
+        public void _RequestCallback(ResponseEntity res) {
+
+            Toast.makeText(MainActivity.this, res.data, Toast.LENGTH_SHORT).show();
+        }
+    };
+
 }
 
 
