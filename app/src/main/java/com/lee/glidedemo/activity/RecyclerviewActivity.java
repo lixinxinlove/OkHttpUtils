@@ -3,6 +3,7 @@ package com.lee.glidedemo.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +18,9 @@ import com.lee.glidedemo.adapter.RVAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewActivity extends AppCompatActivity {
+public class RecyclerViewActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private RecyclerView recyclerView;
 
@@ -29,6 +32,8 @@ public class RecyclerViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerview);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.sfl);
+        swipeRefreshLayout.setOnRefreshListener(this);
         mData = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             mData.add("leee" + i);
@@ -64,5 +69,10 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
