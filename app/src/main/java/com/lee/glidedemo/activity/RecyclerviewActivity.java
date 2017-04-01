@@ -1,5 +1,7 @@
 package com.lee.glidedemo.activity;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.lee.glidedemo.R;
 import com.lee.glidedemo.adapter.RVAdapter;
 
@@ -49,7 +52,15 @@ public class RecyclerViewActivity extends AppCompatActivity {
             }
         });
 
-        adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
+        adapter.setDuration(5000);
+        adapter.openLoadAnimation(new BaseAnimation() {
+            @Override
+            public Animator[] getAnimators(View view) {
+                return new Animator[]{
+                        ObjectAnimator.ofFloat(view, "scaleY", 0.1f, 2f, 1)
+                };
+            }
+        });
 
         recyclerView.setAdapter(adapter);
 
