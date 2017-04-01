@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.lee.glidedemo.activity.RecyclerViewActivity;
 import com.lee.glidedemo.network.RequestCallback;
 import com.lee.glidedemo.network.ResponseEntity;
 
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 // App.api.login(callback);
                 App.api.userLogin(callback);
+
+                startActivity(new Intent(MainActivity.this, RecyclerViewActivity.class));
+
             }
         });
 
@@ -205,7 +209,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 App.api.postMultipart(callback, file);
                 break;
             case R.id.btn_down:
-                App.api.downFile(requestCallback, "http://ohhic2rt3.bkt.clouddn.com/lee0.jpg-CSDN");
+                // App.api.downFile(requestCallback, "http://ohhic2rt3.bkt.clouddn.com/lee0.jpg-CSDN");
+                App.api.login(callback);
+
                 break;
         }
     }

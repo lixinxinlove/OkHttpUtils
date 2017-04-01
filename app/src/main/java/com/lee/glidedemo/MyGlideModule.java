@@ -34,7 +34,7 @@ public class MyGlideModule implements GlideModule {
         int diskCacheSize = 1024 * 1024 * 30;//最多可以缓存多少字节的数据
         //设置磁盘缓存大小
         //builder.setDiskCache(new DiskLruCacheFactory(cacheDir.getPath(), "glide", diskCacheSize));
-        builder.setDiskCache(new ExternalCacheDiskCacheFactory(context, "glide1", diskCacheSize));
+          builder.setDiskCache(new ExternalCacheDiskCacheFactory(context, "glide1", diskCacheSize));
 
 
         builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);

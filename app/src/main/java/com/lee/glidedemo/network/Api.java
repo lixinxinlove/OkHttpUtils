@@ -4,12 +4,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.lee.glidedemo.App;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -26,24 +30,49 @@ import okhttp3.Response;
  */
 public class Api {
 
-    OkHttpClient client;
 
+    OkHttpClient client;
+    //缓存文件夹
+    // File cacheFile = new File(App.getApplication().getExternalCacheDir().toString(),"cache");
+    //Cache cache=new Cache(cacheFile,1024*1024*10);
     final Handler mHandler = new Handler(Looper.getMainLooper());
 
     public Api() {
+
+        File cacheFile = new File(App.getApplication().getExternalCacheDir().toString(), "cache");
+        Cache cache = new Cache(cacheFile, 1024 * 1024 * 10);
         client = new OkHttpClient.Builder()
                 .connectTimeout(1, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
+                .cache(cache)
                 .build();
     }
 
     public void login(RequestCallback requestCallback) {
-        Request.Builder requestBuilder = new Request.Builder().url("http://www.baidu.com");
-        Request request = requestBuilder.build();
-        Call call = client.newCall(request);
+        Request.Builder requestBuilder = new Request.Builder()
+                .cacheControl(new CacheControl.Builder().maxAge(1000, TimeUnit.SECONDS).build())
+                .url("http://www.baidu.com");
+
+        final Request request = requestBuilder.build();
+        final Call call = client.newCall(request);
         requestCallback.setCall(call);
         RequestCallbackImpl callback = new RequestCallbackImpl(requestCallback);
         call.enqueue(callback);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    Response response=call.execute();
+                    if (response.isSuccessful()){
+                        Log.e("lee",response.cacheResponse()+"");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 
@@ -68,7 +97,6 @@ public class Api {
         RequestCallbackImpl callback = new RequestCallbackImpl(requestCallback);
         call.enqueue(callback);
     }
-
 
     //上传单个文件
     public void postFile(RequestCallback requestCallback, String filepath) {
@@ -133,10 +161,10 @@ public class Api {
                 InputStream inputStream = response.body().byteStream();
                 FileOutputStream fileOutputStream = null;
 
-                String fileName= System.currentTimeMillis()+"lee.jpg";
+                String fileName = System.currentTimeMillis() + "lee.jpg";
 
                 try {
-                    fileOutputStream = new FileOutputStream(new File("/sdcard/"+fileName));
+                    fileOutputStream = new FileOutputStream(new File("/sdcard/" + fileName));
                     byte[] buffer = new byte[2048];
                     int len = 0;
                     while ((len = inputStream.read(buffer)) != -1) {
@@ -150,7 +178,7 @@ public class Api {
 
 
                 final ResponseEntity entity = new ResponseEntity();
-                entity.data="文件下载成功";
+                entity.data = "文件下载成功";
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -197,6 +225,11 @@ public class Api {
             entity.data = str;
             entity.message = "ok";
 
+
+            if (response.isSuccessful()) {
+                Log.e("lxx", response.cacheResponse() + "");
+            }
+
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -204,6 +237,7 @@ public class Api {
                 }
             });
 
+            response.body().close();
         }
     }
 }
