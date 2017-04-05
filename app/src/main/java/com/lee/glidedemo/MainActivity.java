@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.lee.glidedemo.activity.RecyclerViewActivity;
+import com.lee.glidedemo.activity.TakePhoneActivity;
 import com.lee.glidedemo.network.RequestCallback;
 import com.lee.glidedemo.network.ResponseEntity;
 
@@ -47,12 +48,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnOkHttp;
     Button btnPostImageText;
     Button btnDown;
+    Button btn_take;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        btn_take = (Button) findViewById(R.id.btn_take);
+        btn_take.setOnClickListener(this);
 
         imageView = (ImageView) findViewById(R.id.iv);
         tv = (TextView) findViewById(R.id.tv);
@@ -212,6 +217,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // App.api.downFile(requestCallback, "http://ohhic2rt3.bkt.clouddn.com/lee0.jpg-CSDN");
                 App.api.login(callback);
 
+                break;
+
+            case R.id.btn_take:
+                startActivity(new Intent(this,TakePhoneActivity.class));
                 break;
         }
     }

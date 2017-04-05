@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.lee.glidedemo"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -31,4 +31,6 @@ dependencies {
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:recyclerview-v7:23.2.1'
     compile 'com.google.code.gson:gson:2.2.4'
+
+    compile 'com.alibaba:fastjson:1.1.56.android'
 }

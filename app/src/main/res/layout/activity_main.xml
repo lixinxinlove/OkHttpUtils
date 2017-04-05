@@ -45,10 +45,23 @@
 
 
     <Button
-        android:text="下载图片"
         android:id="@+id/btn_down"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="下载图片" />
+
+    <Button
+        android:id="@+id/btn_take"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="拍照" />
+
+
+    <ImageView
+        android:id="@+id/iv_take"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/ic_launcher" />
 
 
 </LinearLayout>
