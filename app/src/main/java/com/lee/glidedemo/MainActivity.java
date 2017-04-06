@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
@@ -23,7 +26,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.lee.glidedemo.activity.RecyclerViewActivity;
-import com.lee.glidedemo.activity.TakePhoneActivity;
+import com.lee.glidedemo.http.DataApiForOkHttp;
+import com.lee.glidedemo.http.EventRequestCallback;
+import com.lee.glidedemo.http.EventResponseEntity;
 import com.lee.glidedemo.network.RequestCallback;
 import com.lee.glidedemo.network.ResponseEntity;
 
@@ -48,16 +53,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnOkHttp;
     Button btnPostImageText;
     Button btnDown;
-    Button btn_take;
+    Button btnTake;
+    ImageView ivTake;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ivTake = (ImageView) findViewById(R.id.iv_take);
 
+        btnTake = (Button) findViewById(R.id.btn_take_1);
 
-        btn_take = (Button) findViewById(R.id.btn_take);
-        btn_take.setOnClickListener(this);
+        btnTake.setOnClickListener(this);
 
         imageView = (ImageView) findViewById(R.id.iv);
         tv = (TextView) findViewById(R.id.tv);
@@ -166,7 +173,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .dontAnimate()
                 .centerCrop()
                 .into(imageView);
+
+
+        // initStatus();
+
+
+        ivTake.setOnClickListener(this);
+
     }
+
+    private void initStatus() {
+
+        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.component);
+        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.mipmap.component_filling);
+
+        Drawable mFocusedDrawable = new BitmapDrawable(getResources(), bitmap2);
+        Drawable mDefaultDrawable = new BitmapDrawable(getResources(), bitmap1);
+        Drawable mEnabledPressedDrawable = new BitmapDrawable(getResources(), bitmap2);
+        StateListDrawable drawable = new StateListDrawable();
+
+        drawable.addState(new int[]{android.R.attr.state_focused}, mFocusedDrawable);
+        drawable.addState(new int[]{android.R.attr.state_enabled, android.R.attr.state_pressed}, mEnabledPressedDrawable);
+        drawable.addState(new int[0], mDefaultDrawable);
+
+        drawable.setBounds(0, 0, 64, 64);
+
+        ivTake.setImageDrawable(drawable);
+
+
+        DataApiForOkHttp http = new DataApiForOkHttp();
+        http.downAsynFile("http://ww2.sinaimg.cn/large/610dc034gw1farbzjliclj20u00u076w.jpg", mCallback);
+
+    }
+
+
+    EventRequestCallback mCallback=new EventRequestCallback() {
+        @Override
+        public void _RequestCallback(EventResponseEntity res) {
+
+        }
+    };
 
 
     RequestCallback callback = new RequestCallback() {
@@ -219,8 +265,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
 
-            case R.id.btn_take:
-                startActivity(new Intent(this,TakePhoneActivity.class));
+            case R.id.btn_take_1:
+                initStatus();
+                // startActivity(new Intent(this, TakePhoneActivity.class));
                 break;
         }
     }

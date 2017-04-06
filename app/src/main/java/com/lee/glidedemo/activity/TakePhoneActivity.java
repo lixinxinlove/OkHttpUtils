@@ -17,6 +17,7 @@ import com.lee.glidedemo.utils.FileUtils;
 
 import java.io.File;
 
+
 public class TakePhoneActivity extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -36,6 +37,7 @@ public class TakePhoneActivity extends AppCompatActivity implements View.OnClick
 
         IntentFilter intentFilter = new IntentFilter("lee");
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent());
+
     }
 
     @Override
@@ -65,4 +67,5 @@ public class TakePhoneActivity extends AppCompatActivity implements View.OnClick
             iv_take_phone.setImageBitmap(BitmapFactory.decodeFile(imgPath));
         }
     }
+
 }

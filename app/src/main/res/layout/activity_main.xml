@@ -51,7 +51,7 @@
         android:text="下载图片" />
 
     <Button
-        android:id="@+id/btn_take"
+        android:id="@+id/btn_take_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="拍照" />
@@ -59,8 +59,11 @@
 
     <ImageView
         android:id="@+id/iv_take"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="2dp"
         android:src="@mipmap/ic_launcher" />
 
 

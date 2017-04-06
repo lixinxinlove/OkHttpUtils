@@ -31,6 +31,26 @@ public class FileUtils {
 
     public static final String APP_STORAGE_ROOT = "AndroidNAdaption";
 
+
+    public static File getOwnCacheDirectory(Context context, String cacheDir) {
+        File appCacheDir = null;
+        if ("mounted".equals(Environment.getExternalStorageState()) && hasExternalStoragePermission(context)) {
+            appCacheDir = new File(Environment.getExternalStorageDirectory(), cacheDir);
+        }
+
+        if (appCacheDir == null || !appCacheDir.exists() && !appCacheDir.mkdirs()) {
+            appCacheDir = context.getCacheDir();
+        }
+
+        return appCacheDir;
+    }
+
+    private static boolean hasExternalStoragePermission(Context context) {
+        int perm = context.checkCallingOrSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE");
+        return perm == 0;
+    }
+
+
     /**
      * 判断SD卡是否挂载
      */
