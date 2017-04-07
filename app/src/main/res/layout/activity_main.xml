@@ -1,70 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="清除缓存" />
+    android:layout_height="match_parent">
 
 
-    <ImageView
-        android:id="@+id/iv"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="清除缓存" />
 
 
-    <TextView
-
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-
-    <Button
-        android:id="@+id/btn_js"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="js" />
-
-    <Button
-        android:id="@+id/btn_ok_http"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="okhttp" />
-
-    <Button
-        android:id="@+id/btn_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/post" />
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true" />
 
 
-    <Button
-        android:id="@+id/btn_down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="下载图片" />
+        <TextView
 
-    <Button
-        android:id="@+id/btn_take_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="拍照" />
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
 
-    <ImageView
-        android:id="@+id/iv_take"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:padding="2dp"
-        android:src="@mipmap/ic_launcher" />
+        <Button
+            android:id="@+id/btn_js"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="js" />
+
+        <Button
+            android:id="@+id/btn_ok_http"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="okhttp" />
+
+        <Button
+            android:id="@+id/btn_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/post" />
 
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="下载图片" />
+
+        <Button
+            android:id="@+id/btn_take_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拍照" />
+
+
+        <ImageView
+            android:id="@+id/iv_take"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="2dp"
+            android:src="@mipmap/ic_launcher" />
+
+
+        <com.lee.glidedemo.view.calendar.CalendarView
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
