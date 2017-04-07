@@ -3,7 +3,10 @@ package com.lee.glidedemo;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -11,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -31,6 +35,7 @@ import com.lee.glidedemo.http.EventRequestCallback;
 import com.lee.glidedemo.http.EventResponseEntity;
 import com.lee.glidedemo.network.RequestCallback;
 import com.lee.glidedemo.network.ResponseEntity;
+import com.lee.glidedemo.service.DownLoadService;
 import com.lee.glidedemo.utils.FileUtils;
 import com.lee.glidedemo.utils.HanziToPinyin;
 
@@ -40,9 +45,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import okhttp.DownloadListener;
-import okhttp.DownloadTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -64,11 +66,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnTake;
     ImageView ivTake;
 
+
+    private LocalReceiver localReceiver;
+    private IntentFilter intentFilter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        initReceiver();
 
         pingYing();
 
@@ -196,6 +205,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void initReceiver() {
+
+        localReceiver=new LocalReceiver();
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("lee");
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(localReceiver, intentFilter);
+
+
+    }
+
     private void pingYing() {
 
         ArrayList<HanziToPinyin.Token> tokens = HanziToPinyin.getInstance().get(DATA);
@@ -235,36 +255,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         File cacheDir = FileUtils.getOwnCacheDirectory(App.context, "lee/ImageCache");
         File img = new File(cacheDir, "lee.jpg");
 
-        DownloadTask task = new DownloadTask(new DownloadListener() {
-            @Override
-            public void onProgress(int progress) {
+//       DownloadTask task = new DownloadTask(new DownloadListener() {
+//            @Override
+//            public void onProgress(int progress) {
+//
+//                Log.e("progress=", "--" + progress);
+//            }
+//
+//            @Override
+//            public void onSuccess() {
+//
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//
+//            }
+//
+//            @Override
+//            public void onPaused() {
+//
+//            }
+//
+//            @Override
+//            public void onCanceled() {
+//
+//            }
+//        }, img);
+//
+//
+//        task.execute(url);
 
-                Log.e("progress=","--"+progress);
-            }
 
-            @Override
-            public void onSuccess() {
+        Intent i = new Intent(this, DownLoadService.class);
+        i.setAction("lee");
+        startService(i);
 
-            }
-
-            @Override
-            public void onFailed() {
-
-            }
-
-            @Override
-            public void onPaused() {
-
-            }
-
-            @Override
-            public void onCanceled() {
-
-            }
-        }, img);
-
-
-        task.execute(url);
 
     }
 
@@ -290,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         callback._onCancelled();
         Log.e("", "callback");
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(localReceiver);
     }
 
     @Override
@@ -342,6 +369,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(MainActivity.this, res.data, Toast.LENGTH_SHORT).show();
         }
     };
+
+
+    class LocalReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("lee")) {
+                Toast.makeText(MainActivity.this, "收到广播", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 
 }
 

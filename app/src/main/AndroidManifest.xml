@@ -38,7 +38,11 @@
         <activity android:name=".TabLayoutActivity" />
         <activity android:name=".WebActivity" />
         <activity android:name=".activity.RecyclerViewActivity" />
-        <activity android:name=".activity.TakePhoneActivity"></activity>
+        <activity android:name=".activity.TakePhoneActivity" />
+
+        <service
+            android:name=".service.DownLoadService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
