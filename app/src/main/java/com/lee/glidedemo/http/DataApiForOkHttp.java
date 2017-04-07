@@ -128,7 +128,7 @@ public class DataApiForOkHttp {
      * @param url
      * @param callback
      */
-    public void downAsynFile(String url, EventRequestCallback callback) {
+    public void downAsyncFile(String url, EventRequestCallback callback) {
         Request.Builder requestBuilder = new Request.Builder().url(url);
         requestBuilder.method(GET_METHOD, null);
         Request request = requestBuilder.build();

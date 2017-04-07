@@ -31,14 +31,18 @@ import com.lee.glidedemo.http.EventRequestCallback;
 import com.lee.glidedemo.http.EventResponseEntity;
 import com.lee.glidedemo.network.RequestCallback;
 import com.lee.glidedemo.network.ResponseEntity;
+import com.lee.glidedemo.utils.HanziToPinyin;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String DATA = "我是中国人";
 
     ImageView imageView;
     Button btn;
@@ -60,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        pingYing();
+
+
         ivTake = (ImageView) findViewById(R.id.iv_take);
 
         btnTake = (Button) findViewById(R.id.btn_take_1);
@@ -182,6 +191,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void pingYing() {
+
+        ArrayList<HanziToPinyin.Token> tokens = HanziToPinyin.getInstance().get(DATA);
+        for (HanziToPinyin.Token token : tokens) {
+            Log.e("lee", "sourec" + token.source);
+            Log.e("lee", "sourec" + token.type);
+            Log.e("lee", "sourec" + token.target);
+        }
+
+    }
+
     private void initStatus() {
 
         Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.component);
@@ -202,12 +222,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         DataApiForOkHttp http = new DataApiForOkHttp();
-        http.downAsynFile("http://ww2.sinaimg.cn/large/610dc034gw1farbzjliclj20u00u076w.jpg", mCallback);
+        http.downAsyncFile("http://ww2.sinaimg.cn/large/610dc034gw1farbzjliclj20u00u076w.jpg", mCallback);
 
     }
 
 
-    EventRequestCallback mCallback=new EventRequestCallback() {
+    EventRequestCallback mCallback = new EventRequestCallback() {
         @Override
         public void _RequestCallback(EventResponseEntity res) {
 
