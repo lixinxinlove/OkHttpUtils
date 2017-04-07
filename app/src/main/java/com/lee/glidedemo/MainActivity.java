@@ -31,6 +31,7 @@ import com.lee.glidedemo.http.EventRequestCallback;
 import com.lee.glidedemo.http.EventResponseEntity;
 import com.lee.glidedemo.network.RequestCallback;
 import com.lee.glidedemo.network.ResponseEntity;
+import com.lee.glidedemo.utils.FileUtils;
 import com.lee.glidedemo.utils.HanziToPinyin;
 
 import java.io.BufferedOutputStream;
@@ -39,6 +40,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp.DownloadListener;
+import okhttp.DownloadTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -189,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ivTake.setOnClickListener(this);
 
+
     }
 
     private void pingYing() {
@@ -223,6 +228,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         DataApiForOkHttp http = new DataApiForOkHttp();
         http.downAsyncFile("http://ww2.sinaimg.cn/large/610dc034gw1farbzjliclj20u00u076w.jpg", mCallback);
+
+        String url = "http://ww2.sinaimg.cn/large/610dc034gw1farbzjliclj20u00u076w.jpg";
+
+
+        File cacheDir = FileUtils.getOwnCacheDirectory(App.context, "lee/ImageCache");
+        File img = new File(cacheDir, "lee.jpg");
+
+        DownloadTask task = new DownloadTask(new DownloadListener() {
+            @Override
+            public void onProgress(int progress) {
+
+                Log.e("progress=","--"+progress);
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+
+            @Override
+            public void onPaused() {
+
+            }
+
+            @Override
+            public void onCanceled() {
+
+            }
+        }, img);
+
+
+        task.execute(url);
 
     }
 
