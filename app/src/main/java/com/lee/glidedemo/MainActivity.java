@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
@@ -102,12 +103,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnPostImageText.setOnClickListener(this);
 
         btnOkHttp.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 // App.api.login(callback);
                 App.api.userLogin(callback);
 
-                startActivity(new Intent(MainActivity.this, RecyclerViewActivity.class));
+                Intent intent = new Intent(MainActivity.this, RecyclerViewActivity.class);
+                //intent.putExtra("transition", "explode");
+                //intent.putExtra("transition", "slide");
+                intent.putExtra("transition", "fade");
+                startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+
 
             }
         });
@@ -207,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initReceiver() {
 
-        localReceiver=new LocalReceiver();
+        localReceiver = new LocalReceiver();
         intentFilter = new IntentFilter();
         intentFilter.addAction("lee");
 

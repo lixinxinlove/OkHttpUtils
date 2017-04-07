@@ -7,7 +7,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -31,6 +35,43 @@ public class RecyclerViewActivity extends AppCompatActivity implements SwipeRefr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        // 允许使用transitions
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
+        String transition = getIntent().getStringExtra("transition");
+
+        switch (transition) {
+            case "explode":
+                // 设置进入时进入动画
+                Explode explode = new Explode();
+                explode.setDuration(1000);
+                getWindow().setEnterTransition(explode);
+
+                break;
+
+            case "slide":
+                Slide slide = new Slide();
+                slide.setDuration(1000);
+                getWindow().setEnterTransition(slide);
+
+                break;
+
+            case "fade":
+                Fade fade = new Fade();
+                fade.setDuration(1000);
+                getWindow().setEnterTransition(fade);
+
+                break;
+
+            case "share":
+                break;
+        }
+
+
+
+
         setContentView(R.layout.activity_recyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.sfl);
         swipeRefreshLayout.setOnRefreshListener(this);
